@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+#include "Exceptions.h"
 
 Game::Game(std::unique_ptr<Player> first, std::unique_ptr<Player> second) {
     players_[0] = std::move(first);
@@ -33,30 +34,32 @@ const Player* Game::run() {
     std::cout << "\n" << players_[0]->describe() << "  vs  " << players_[1]->describe() << "\n";
 
     while (true) {
-        board_.print();
+        std::cout << board_;
         Player& current = *players_[turn];
 
-        // Polymorphism: we don't know (or care) whether this is human or computer.
-        auto [row, col] = current.chooseMove(board_);
+        std::pair<int, int> move;
+        try {
+            // Polymorphism: we don't know (or care) whether this is human or computer.
+            move = current.chooseMove(board_);
 
-        if (row == Player::UNDO_MOVE) {
-            undo(turn);
+            if (move.first == Player::UNDO_MOVE) {
+                undo(turn);
+                continue;
+            }
+            board_.placeMark(move.first, move.second, current.getSymbol());   // may throw
+        } catch (const InvalidMoveException& e) {
+            std::cout << "Invalid move: " << e.what() << " Try again.\n";
             continue;
         }
-
-        if (!board_.placeMark(row, col, current.getSymbol())) {
-            std::cout << "Invalid move, try again.\n";
-            continue;
-        }
-        history_.add(Move(row, col, current.getSymbol()));
+        history_.add(Move(move.first, move.second, current.getSymbol()));
 
         if (board_.checkWinner() != ' ') {
-            board_.print();
+            std::cout << board_;
             std::cout << current.getName() << " wins!\n";
             return &current;
         }
         if (board_.isFull()) {
-            board_.print();
+            std::cout << board_;
             std::cout << "It's a draw!\n";
             return nullptr;
         }

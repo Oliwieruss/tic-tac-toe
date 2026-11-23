@@ -1,7 +1,7 @@
 #include "HumanPlayer.h"
 #include <iostream>
 #include <limits>
-#include <stdexcept>
+#include "Exceptions.h"
 
 HumanPlayer::HumanPlayer(const std::string& name, char symbol)
     : Player(name, symbol) {}
@@ -11,10 +11,10 @@ std::pair<int, int> HumanPlayer::chooseMove(const Board& /*board*/) const {
     std::cout << getName() << " (" << getSymbol() << "), enter row and column (1-3), or 0 0 to undo: ";
     if (!(std::cin >> row >> col)) {
         if (std::cin.eof())
-            throw std::runtime_error("Input stream closed.");
+            throw InputClosedException();
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return {-1, -1};                      // invalid -> Game will ask again
+        throw InvalidMoveException("Please enter two numbers, e.g. 2 3.");
     }
     if (row == 0 && col == 0)
         return {UNDO_MOVE, UNDO_MOVE};        // player asked to undo
