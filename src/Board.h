@@ -12,6 +12,7 @@ public:
 
     // Modifiers
     bool placeMark(int row, int col, char symbol);   // false if cell is taken / out of range
+    bool clearCell(int row, int col);                // empties a cell (used by undo)
     void reset();
 
     // Accessors (const: they do not change the board)

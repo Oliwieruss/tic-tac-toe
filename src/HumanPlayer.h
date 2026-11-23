@@ -9,6 +9,7 @@ public:
 
     std::pair<int, int> chooseMove(const Board& board) const override;
     std::string describe() const override;
+    bool isInteractive() const override;
 };
 
 #endif

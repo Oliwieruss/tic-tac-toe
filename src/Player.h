@@ -19,6 +19,12 @@ public:
     // Virtual with a default implementation, can be overridden.
     virtual std::string describe() const;
 
+    // True for players that type their moves (and may ask for undo). Default: false.
+    virtual bool isInteractive() const;
+
+    // Special value returned by chooseMove when the player asks to undo.
+    static constexpr int UNDO_MOVE = -2;
+
     // Accessors and mutators (encapsulation)
     const std::string& getName() const;
     char getSymbol() const;

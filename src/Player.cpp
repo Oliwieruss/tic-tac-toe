@@ -9,6 +9,8 @@ std::string Player::describe() const {
     return name_ + " (" + symbol_ + ")";
 }
 
+bool Player::isInteractive() const { return false; }
+
 const std::string& Player::getName() const { return name_; }
 char Player::getSymbol() const { return symbol_; }
 void Player::setName(const std::string& name) { name_ = name; }

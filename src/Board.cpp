@@ -24,6 +24,13 @@ bool Board::placeMark(int row, int col, char symbol) {
     return true;
 }
 
+bool Board::clearCell(int row, int col) {
+    if (!inRange(row, col) || cells_[row][col] == ' ')
+        return false;
+    cells_[row][col] = ' ';
+    return true;
+}
+
 char Board::getCell(int row, int col) const {
     return inRange(row, col) ? cells_[row][col] : ' ';
 }
