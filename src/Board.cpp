@@ -50,3 +50,17 @@ char Board::checkWinner() const {
     }
     return ' ';
 }
+
+void Board::print() const {
+    std::cout << "\n    1   2   3\n";
+    for (int r = 0; r < SIZE; ++r) {
+        std::cout << "  " << (r + 1) << " ";
+        for (int c = 0; c < SIZE; ++c) {
+            std::cout << cells_[r][c];
+            if (c < SIZE - 1) std::cout << " | ";
+        }
+        std::cout << "\n";
+        if (r < SIZE - 1) std::cout << "    --+---+--\n";
+    }
+    std::cout << "\n";
+}

@@ -19,6 +19,7 @@ public:
     bool isFull() const;
     bool isCellFree(int row, int col) const;
     char checkWinner() const;                 // 'X', 'O' or ' ' (no winner yet)
+    void print() const;                       // draws the board in the console
 
 private:
     std::array<std::array<char, SIZE>, SIZE> cells_;
