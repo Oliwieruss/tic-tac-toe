@@ -1,6 +1,7 @@
 #ifndef PLAYERRECORD_H
 #define PLAYERRECORD_H
 
+#include <ostream>
 #include <string>
 
 // Score of one player: wins, losses and draws.
@@ -26,5 +27,13 @@ private:
     int losses_;
     int draws_;
 };
+
+// Two records are equal when they belong to the same player name.
+bool operator==(const PlayerRecord& a, const PlayerRecord& b);
+
+// Ranking order: "a < b" means a ranks below b (fewer wins, then more losses).
+bool operator<(const PlayerRecord& a, const PlayerRecord& b);
+
+std::ostream& operator<<(std::ostream& os, const PlayerRecord& record);
 
 #endif

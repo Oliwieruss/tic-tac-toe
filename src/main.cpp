@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include "ComputerPlayer.h"
+#include "Exceptions.h"
 #include "Game.h"
 #include "HumanPlayer.h"
 #include "ScoreBoard.h"
@@ -15,7 +16,7 @@ static std::string readLine(const std::string& prompt) {
     do {
         std::cout << prompt;
         if (!std::getline(std::cin, line))
-            throw std::runtime_error("Input stream closed.");
+            throw InputClosedException();
     } while (line.empty());
     return line;
 }
@@ -67,7 +68,7 @@ static void playGame(ScoreBoard& scoreBoard) {
         if (turn == 0) break;
         const Move* m = game.getHistory().findByTurn(turn);
         if (m)
-            std::cout << "  Turn " << turn << ": " << m->describe() << "\n";
+            std::cout << "  Turn " << turn << ": " << *m << "\n";
         else
             std::cout << "  No such turn.\n";
     }
@@ -94,45 +95,46 @@ int main() {
             int choice = readInt("Choose: ");
             if (choice == 0) break;
 
-            switch (choice) {
-            case 1:
-                playGame(scoreBoard);
-                break;
-            case 2:
-                scoreBoard.print();
-                break;
-            case 3: {
-                std::string name = readLine("Name: ");
-                std::cout << (scoreBoard.addPlayer(name) ? "Player added.\n"
-                                                         : "That name is empty or already taken.\n");
-                break;
-            }
-            case 4: {
-                std::string name = readLine("Name: ");
-                const PlayerRecord* r = scoreBoard.findPlayer(name);
-                if (r)
-                    std::cout << r->getName() << ": " << r->getWins() << " wins, "
-                              << r->getLosses() << " losses, " << r->getDraws() << " draws\n";
-                else
-                    std::cout << "Player not found.\n";
-                break;
-            }
-            case 5: {
-                std::string oldName = readLine("Current name: ");
-                std::string newName = readLine("New name: ");
-                std::cout << (scoreBoard.renamePlayer(oldName, newName)
-                                  ? "Player renamed.\n"
-                                  : "Could not rename (not found, or new name taken).\n");
-                break;
-            }
-            case 6: {
-                std::string name = readLine("Name: ");
-                std::cout << (scoreBoard.removePlayer(name) ? "Player removed.\n"
-                                                             : "Player not found.\n");
-                break;
-            }
-            default:
-                std::cout << "Unknown option.\n";
+            try {
+                switch (choice) {
+                case 1:
+                    playGame(scoreBoard);
+                    break;
+                case 2:
+                    scoreBoard.print();
+                    break;
+                case 3: {
+                    scoreBoard.addPlayer(readLine("Name: "));
+                    std::cout << "Player added.\n";
+                    break;
+                }
+                case 4: {
+                    std::string name = readLine("Name: ");
+                    const PlayerRecord* r = scoreBoard.findPlayer(name);
+                    if (r)
+                        std::cout << *r << "\n";
+                    else
+                        std::cout << "Player not found.\n";
+                    break;
+                }
+                case 5: {
+                    std::string oldName = readLine("Current name: ");
+                    std::string newName = readLine("New name: ");
+                    scoreBoard.renamePlayer(oldName, newName);
+                    std::cout << "Player renamed.\n";
+                    break;
+                }
+                case 6: {
+                    scoreBoard.removePlayer(readLine("Name: "));
+                    std::cout << "Player removed.\n";
+                    break;
+                }
+                default:
+                    std::cout << "Unknown option.\n";
+                }
+            } catch (const GameException& e) {
+                // Recoverable error: report it and return to the menu.
+                std::cout << "Error: " << e.what() << "\n";
             }
         }
     } catch (const std::exception& e) {

@@ -15,3 +15,20 @@ void PlayerRecord::setName(const std::string& name) { name_ = name; }
 void PlayerRecord::addWin() { ++wins_; }
 void PlayerRecord::addLoss() { ++losses_; }
 void PlayerRecord::addDraw() { ++draws_; }
+
+bool operator==(const PlayerRecord& a, const PlayerRecord& b) {
+    return a.getName() == b.getName();
+}
+
+bool operator<(const PlayerRecord& a, const PlayerRecord& b) {
+    if (a.getWins() != b.getWins())
+        return a.getWins() < b.getWins();
+    if (a.getLosses() != b.getLosses())
+        return a.getLosses() > b.getLosses();
+    return a.getName() > b.getName();             // alphabetical order when everything else is equal
+}
+
+std::ostream& operator<<(std::ostream& os, const PlayerRecord& record) {
+    return os << record.getName() << ": " << record.getWins() << " wins, "
+              << record.getLosses() << " losses, " << record.getDraws() << " draws";
+}
