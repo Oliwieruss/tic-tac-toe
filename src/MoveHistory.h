@@ -12,7 +12,7 @@ public:
     void add(const Move& move);                       // ADD a move
     bool removeLast();                                // REMOVE the last move (undo); false if empty
     const Move* findByTurn(int turn) const;           // SEARCH: turn is 1-based, nullptr if not found
-    const Move& last() const;                         // last move (check isEmpty() first)
+    const Move& last() const;                         // last move; throws std::out_of_range if empty
     bool isEmpty() const;
     std::size_t size() const;
     void clear();

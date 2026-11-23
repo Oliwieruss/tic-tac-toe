@@ -13,3 +13,7 @@ std::string Move::describe() const {
     return std::string(1, symbol_) + " -> row " + std::to_string(row_ + 1) +
            ", col " + std::to_string(col_ + 1);
 }
+
+std::ostream& operator<<(std::ostream& os, const Move& move) {
+    return os << move.describe();
+}

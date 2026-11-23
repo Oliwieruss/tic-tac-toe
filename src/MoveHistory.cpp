@@ -1,5 +1,6 @@
 #include "MoveHistory.h"
 #include <iostream>
+#include <stdexcept>
 
 void MoveHistory::add(const Move& move) {
     moves_.push_back(move);
@@ -19,6 +20,8 @@ const Move* MoveHistory::findByTurn(int turn) const {
 }
 
 const Move& MoveHistory::last() const {
+    if (moves_.empty())
+        throw std::out_of_range("The move history is empty.");
     return moves_.back();
 }
 
@@ -32,5 +35,5 @@ void MoveHistory::print() const {
         return;
     }
     for (std::size_t i = 0; i < moves_.size(); ++i)
-        std::cout << "  Turn " << (i + 1) << ": " << moves_[i].describe() << "\n";
+        std::cout << "  Turn " << (i + 1) << ": " << moves_[i] << "\n";
 }

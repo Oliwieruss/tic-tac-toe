@@ -1,6 +1,7 @@
 #ifndef MOVE_H
 #define MOVE_H
 
+#include <ostream>
 #include <string>
 
 // One move made during a game: who played, and where.
@@ -20,5 +21,7 @@ private:
     int col_;
     char symbol_;
 };
+
+std::ostream& operator<<(std::ostream& os, const Move& move);
 
 #endif
