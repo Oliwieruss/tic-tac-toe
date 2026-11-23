@@ -11,7 +11,7 @@ public:
     Board();                                  // default constructor: empty board
 
     // Modifiers
-    bool placeMark(int row, int col, char symbol);   // false if cell is taken / out of range
+    void placeMark(int row, int col, char symbol);   // throws InvalidMoveException / CellOccupiedException
     bool clearCell(int row, int col);                // empties a cell (used by undo)
     void reset();
 
@@ -20,11 +20,13 @@ public:
     bool isFull() const;
     bool isCellFree(int row, int col) const;
     char checkWinner() const;                 // 'X', 'O' or ' ' (no winner yet)
-    void print() const;                       // draws the board in the console
 
 private:
     std::array<std::array<char, SIZE>, SIZE> cells_;
     bool inRange(int row, int col) const;
 };
+
+// Draws the board: std::cout << board;
+std::ostream& operator<<(std::ostream& os, const Board& board);
 
 #endif

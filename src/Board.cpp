@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Exceptions.h"
 
 Board::Board() {
     reset();
@@ -17,11 +18,12 @@ bool Board::isCellFree(int row, int col) const {
     return inRange(row, col) && cells_[row][col] == ' ';
 }
 
-bool Board::placeMark(int row, int col, char symbol) {
-    if (!isCellFree(row, col))
-        return false;
+void Board::placeMark(int row, int col, char symbol) {
+    if (!inRange(row, col))
+        throw InvalidMoveException("Row and column must be between 1 and " + std::to_string(SIZE) + ".");
+    if (cells_[row][col] != ' ')
+        throw CellOccupiedException("That cell is already taken.");
     cells_[row][col] = symbol;
-    return true;
 }
 
 bool Board::clearCell(int row, int col) {
@@ -58,16 +60,17 @@ char Board::checkWinner() const {
     return ' ';
 }
 
-void Board::print() const {
-    std::cout << "\n    1   2   3\n";
-    for (int r = 0; r < SIZE; ++r) {
-        std::cout << "  " << (r + 1) << " ";
-        for (int c = 0; c < SIZE; ++c) {
-            std::cout << cells_[r][c];
-            if (c < SIZE - 1) std::cout << " | ";
+std::ostream& operator<<(std::ostream& os, const Board& board) {
+    os << "\n    1   2   3\n";
+    for (int r = 0; r < Board::SIZE; ++r) {
+        os << "  " << (r + 1) << " ";
+        for (int c = 0; c < Board::SIZE; ++c) {
+            os << board.getCell(r, c);
+            if (c < Board::SIZE - 1) os << " | ";
         }
-        std::cout << "\n";
-        if (r < SIZE - 1) std::cout << "    --+---+--\n";
+        os << "\n";
+        if (r < Board::SIZE - 1) os << "    --+---+--\n";
     }
-    std::cout << "\n";
+    os << "\n";
+    return os;
 }
