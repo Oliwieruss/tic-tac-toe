@@ -1,7 +1,7 @@
 # Kółko i krzyżyk (C++)
 
 Konsolowa gra w kółko i krzyżyk – projekt zaliczeniowy z przedmiotu *Podstawy programowania obiektowego w C++*.
-Projekt realizuje wymagania na ocenę **10 pkt** (klasy, dziedziczenie, polimorfizm, przeciążanie operatorów, wyjątki).
+
 
 ## Funkcjonalność
 
